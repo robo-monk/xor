@@ -2,8 +2,10 @@
 	import MonacoEditor from './monaco-editor/MonacoEditor.svelte';
 	import Editor from './editor/Editor.svelte';
   import { onMount } from 'svelte'
+  import Sidebar from './fs/Sidebar.svelte';
 </script>
 
+<Sidebar/>
 <MonacoEditor/>
 
 <style lang="scss">
