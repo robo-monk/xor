@@ -1,13 +1,14 @@
 <script lang="ts">
+	import MonacoEditor from './monaco-editor/MonacoEditor.svelte';
 	import Editor from './editor/Editor.svelte';
   import { onMount } from 'svelte'
 </script>
 
-<Editor/>
+<MonacoEditor/>
 
 <style lang="scss">
   :global(body) {
-    margin: 100px 0px;
+    margin: 0;
     font-family: SFMono, monospace;
     font-size: 18px;
     background-color: #111318;
