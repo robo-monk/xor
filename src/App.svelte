@@ -1,12 +1,33 @@
 <script lang="ts">
-	import MonacoEditor from './monaco-editor/MonacoEditor.svelte';
-	import Editor from './editor/Editor.svelte';
+  import MonacoEditor from './monaco-editor/MonacoEditor.svelte'
+  import Editor from './editor/Editor.svelte'
   import { onMount } from 'svelte'
-  import Sidebar from './fs/Sidebar.svelte';
+
+  import { readDir, BaseDirectory, FileEntry, readTextFile } from '@tauri-apps/api/fs'
+  import Sidebar from './fs/Sidebar.svelte'
+
+  let paths: string[] = []
+
+  async function openFile(event: CustomEvent) {
+    let file: FileEntry = event.detail.file
+    console.log('file', file)
+    let contents = await readTextFile(file.path)
+    console.log('>>>', contents)
+    paths = [...paths, file.path]
+  }
 </script>
 
-<Sidebar/>
-<MonacoEditor/>
+<div class="window-container">
+  <Sidebar on:openFile={openFile} />
+
+  {#if paths.length}
+    {#each paths as path}
+      <div class="tab">
+        <MonacoEditor filePath={path} />
+      </div>
+    {/each}
+  {/if}
+</div>
 
 <style lang="scss">
   :global(body) {
@@ -27,4 +48,14 @@
     border-radius: 4px;
   }
 
+  .window-container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .tab {
+    border: 1px solid white;
+    min-width: 150px;
+    width: 100%;
+  }
 </style>
