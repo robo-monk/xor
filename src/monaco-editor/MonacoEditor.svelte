@@ -1,7 +1,7 @@
 <script lang="ts">
   import { monaco } from './monaco'
   // import * as monaco from 'monaco-editor'
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { emit, listen } from '@tauri-apps/api/event'
   import { readDir, BaseDirectory, FileEntry, readTextFile } from '@tauri-apps/api/fs'
 
@@ -14,12 +14,23 @@
   }
 
   let container: HTMLElement
+  let editor: monaco.editor.IStandaloneCodeEditor 
+
+  export function reload() {
+    console.log(">>>")
+  }
+
+  onDestroy(() => {
+    console.log('destroy')
+    editor.dispose();
+  })
 
   onMount(async () => {
-    const editor = monaco.editor.create(container, {
+    editor = monaco.editor.create(container, {
       value: [ await openFile(filePath) ].join('\n'),
       language: 'javascript',
     })
+
 
     monaco.editor.setTheme('vs-dark')
 
